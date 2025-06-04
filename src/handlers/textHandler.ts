@@ -6,6 +6,9 @@ import { escapeMarkdownV2 } from "../utils/markdown";
 export const handleText = async (
   ctx: Context & { message: Message.TextMessage }
 ) => {
+  if (ctx.message.via_bot?.id === ctx.botInfo?.id) {
+    return;
+  }
   const { text } = ctx?.message as Message.TextMessage;
 
   if (!text || text.trim().length === 0) {

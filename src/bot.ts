@@ -1,7 +1,8 @@
 import { Telegraf } from "telegraf";
 import dotenv from "dotenv";
 import { handleText } from "./handlers/textHandler";
-import { startCommand, helpCommand } from "./commands";
+import { handleInlineQuery } from "./handlers/inlineHandler";
+import { startCommand, helpCommand, aboutCommand } from "./commands";
 
 dotenv.config();
 
@@ -12,19 +13,31 @@ bot.catch((err, ctx) => {
   ctx.reply("Sorry, something went wrong. Please try again.");
 });
 
+// Register all commands
 bot.start(startCommand);
 bot.help(helpCommand);
+bot.command("about", aboutCommand);
+
+// Handle callback queries for inline buttons
+bot.action("help", helpCommand);
+bot.action("start", startCommand);
+bot.action("about", aboutCommand);
+
+// Handle inline queries
+bot.on("inline_query", handleInlineQuery);
+
+// Handle text messages
 bot.on("text", handleText);
 
 // Graceful shutdown
-process.once('SIGINT', () => {
-  console.log('🛑 Stopping bot...');
-  bot.stop('SIGINT');
+process.once("SIGINT", () => {
+  console.log("🛑 Stopping bot...");
+  bot.stop("SIGINT");
 });
 
-process.once('SIGTERM', () => {
-  console.log('🛑 Stopping bot...');
-  bot.stop('SIGTERM');
+process.once("SIGTERM", () => {
+  console.log("🛑 Stopping bot...");
+  bot.stop("SIGTERM");
 });
 
 bot
@@ -33,6 +46,7 @@ bot
     console.log("✅ Vanmaram bot is running...");
     console.log("📱 Bot username: @vanmarambot");
     console.log("🔗 API URL:", process.env.API_URL);
+    console.log("🔍 Inline search: ENABLED");
   })
   .catch((error) => {
     console.error("❌ Error launching the bot:", error);
