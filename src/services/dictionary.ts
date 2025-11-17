@@ -9,7 +9,7 @@ export interface DictionaryResponse {
 export const getMeaning = async (word: string): Promise<DictionaryResponse> => {
   const isEnglish = /^[a-zA-Z0-9\s]+$/.test(word);
   const url = `${process.env.API_URL}/meaning/${
-    isEnglish ? "en" : "ml"
+    isEnglish ? "english" : "malayalam"
   }/${encodeURIComponent(word)}`;
 
   try {
